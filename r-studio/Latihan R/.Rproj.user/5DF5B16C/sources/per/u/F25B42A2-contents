@@ -1,0 +1,14 @@
+#"Hello World!"
+# 5 + 5
+# print("Hello World!")
+#y =5
+#y =6
+#first_name= "Abi"
+#lastName="Dinda"
+#FullName=first_name+lastName
+
+text1 = "R is"
+text2 = "awesome"
+
+paste(text1, text2)
+

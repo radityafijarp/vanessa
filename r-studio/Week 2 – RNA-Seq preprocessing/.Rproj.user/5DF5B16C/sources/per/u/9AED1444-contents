@@ -1,0 +1,34 @@
+
+library(knit)
+```{r}
+# Example R code
+summary(cars)
+
+```{r}
+# Example R code
+Halo halo
+halo halo
+summary(cars)
+```
+
+
+# Load the dplyr package
+library(dplyr)
+
+# Create a sample data frame
+data <- tibble(
+  name = c("Alice", "Bob", "Charlie"),
+  age = c(25, 30, 35),
+  salary = c(50000, 60000, 70000)
+)
+
+# Use mutate to create a new column and update an existing column
+data <- data %>%
+  mutate(
+    salary = salary / 1000,  # Create a new column
+    age_next_year = age + 1                # Modify an existing column
+  )
+
+# Print the updated data frame
+print(data)
+```

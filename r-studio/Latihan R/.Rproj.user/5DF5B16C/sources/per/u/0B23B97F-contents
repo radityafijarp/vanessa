@@ -1,0 +1,12 @@
+library(ggplot2)
+library(dplyr)
+
+# Basic scatter plot with ggplot2
+mpg %>%
+  ggplot(aes(x = displ, y = hwy)) +
+  geom_point() +
+  labs(
+    title = "Highway Fuel Efficiency and Engine Displacement",
+    x = "Engine Displacement (Liters)",
+    y = "Highway Miles per Gallon"
+  )
