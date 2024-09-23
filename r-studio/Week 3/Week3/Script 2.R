@@ -60,6 +60,35 @@ dds <- DESeqDataSetFromMatrix(
 # Perform differential expression analysis
 dds <- DESeq(dds)
 
+
+# vst
+vst <- DESeq2::varianceStabilizingTransformation(counts)
+# Recreate this plot. Hint: We did something very similar in the Single gene example data-section.
+# Apply variance-stabilizing transformation to the count data
+vst <- vst(dds, blind = FALSE)
+
+# Extract VST values for the specific gene of interest
+gene_vst_values <- assay(vst)["ENSG00000000003", ]
+
+# Create a data frame with the VST values and the conditions
+vst_df <- data.frame(
+  Expression = gene_vst_values,
+  Condition = colData(vst)$condition
+)
+
+# Create a boxplot of VST values for ENSG00000000003 by condition
+ggplot(vst_df, aes(x = Condition, y = Expression, fill = Condition)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.1, size = 1, alpha = 0.6) +
+  labs(
+    title = "Expression of ENSG00000000003",
+    x = "Condition",
+    y = "VST Expression"
+  ) +
+  theme_minimal() +
+  scale_fill_manual(values = c("control" = "lightblue", "autism" = "orange"))
+
+
 # Get results
 res <- results(dds)
 
