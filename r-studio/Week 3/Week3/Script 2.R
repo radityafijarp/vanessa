@@ -6,6 +6,9 @@ library(reshape2)
 library(tools)
 library(dplyr)
 library(ggplot2)
+library(readr)
+library(tibble)
+library(DESeq2)
 
 # Get a list of all .txt files in the folder
 file_list <- list.files(pattern = "\\.txt$", full.names = TRUE)
@@ -48,7 +51,6 @@ counts <- filtered_matrix
 head(counts)
 
 ####################################
-library(DESeq2)
 # Create DESeqDataSet object
 dds <- DESeqDataSetFromMatrix(
   countData = counts,
@@ -132,14 +134,16 @@ res0.05FC <- res0.05 %>%
 save(dds, vst, res, res0.05, res0.05FC, file = "autism_DEA.RData")
 
 # GO enrichment analysis
+setwd("D:\\New-folder\\vanessa\\r-studio\\Week 3\\Week3")
 # Convert ensembl gene IDs to gene symbols for enrichr
 conversion_table <- read_tsv("Human_ensembl_ids_to_symbols.txt")
 DEG_symbols <- res0.05 %>%
-  rownames_to_column("ensembl") %>%
-  left_join(conversion_table, by = "ensembl") %>%
-  select(symbol) %>%
-  filter(!is.na(symbol))
+  rownames_to_column("ensembl_id") %>%
+  left_join(conversion_table, by = "ensembl_id") %>%
+  select(gene_symbol) %>%
+  filter(!is.na(gene_symbol))
 
 # Write gene symbols to file for enrichr input
-write_lines(DEG_symbols$symbol, "DEG_symbols.txt")
+write_lines(DEG_symbols$gene_symbol, "DEG_symbols.txt")
+
 
