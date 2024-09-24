@@ -63,6 +63,9 @@ dds <- DESeqDataSetFromMatrix(
 dds <- DESeq(dds)
 
 
+# Get results
+res <- results(dds)
+
 # vst
 vst <- DESeq2::varianceStabilizingTransformation(counts)
 # Recreate this plot. Hint: We did something very similar in the Single gene example data-section.
@@ -91,8 +94,6 @@ ggplot(vst_df, aes(x = Condition, y = Expression, fill = Condition)) +
   scale_fill_manual(values = c("control" = "lightblue", "autism" = "orange"))
 
 
-# Get results
-res <- results(dds)
 
 # Question: How many genes with expression were tested?
 num_genes_tested <- nrow(res)
@@ -145,5 +146,26 @@ DEG_symbols <- res0.05 %>%
 
 # Write gene symbols to file for enrichr input
 write_lines(DEG_symbols$gene_symbol, "DEG_symbols.txt")
+
+# Load conversion table
+conversion_table <- read_tsv("Human_ensembl_ids_to_symbols.txt")
+
+# Separate up- and down-regulated genes
+up_regulated_genes <- res0.05FC %>%
+  filter(log2FoldChange > 0) %>%
+  rownames_to_column("ensembl_id") %>%
+  left_join(conversion_table, by = "ensembl_id") %>%
+  filter(!is.na(gene_symbol))
+
+down_regulated_genes <- res0.05FC %>%
+  filter(log2FoldChange < 0) %>%
+  rownames_to_column("ensembl_id") %>%
+  left_join(conversion_table, by = "ensembl_id") %>%
+  filter(!is.na(gene_symbol))
+
+# Write gene symbols to files
+write_lines(up_regulated_genes$gene_symbol, "up_regulated_genes.txt")
+write_lines(down_regulated_genes$gene_symbol, "down_regulated_genes.txt")
+
 
 
