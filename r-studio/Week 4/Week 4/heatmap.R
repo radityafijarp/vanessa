@@ -1,4 +1,4 @@
-install.packages("pheatmap")
+#install.packages("pheatmap")
 library(pheatmap)
 pheatmap(as.matrix(iris.data), 
          cluster_rows = iris.tree,
@@ -13,7 +13,7 @@ rownames(iris.data) <- 1:150 # OBS: iris did not have row names
 annot.row <- data.frame(row.names = rownames(iris.data), Species = iris.species)
 
 pheatmap(as.matrix(iris.data), 
-         cluster_rows = iris.tree.alt,
+         cluster_rows = iris.tree,
          cluster_cols = TRUE, 
          scale = "column", 
          show_rownames = FALSE, 
